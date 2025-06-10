@@ -1,0 +1,19 @@
+{
+  "name": "product-service",
+  "version": "1.0.0",
+  "description": "Product Service with GraphQL and Prisma",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.10.0",
+    "apollo-server": "^3.13.0",
+    "graphql": "^16.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3",
+    "prisma": "^5.10.0"
+  }
+} 
