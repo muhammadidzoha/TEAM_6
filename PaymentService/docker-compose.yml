@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Definisi untuk layanan pembayaran
+  payment-service:
+    build: .  # Memberi tahu Docker Compose untuk membangun image dari Dockerfile di direktori ini
+    container_name: payment-service
+    ports:
+      - "5004:5004" # Memetakan port 5004 di mesinmu ke port 5004 di container
+    environment:
+      # Mengatur environment variables yang akan dibaca oleh src/index.js
+      DB_HOST: payment-db
+      DB_USER: user_pembayaran
+      DB_PASSWORD: password123
+      DB_NAME: db_pembayaran
+      # Ganti dengan nama service order dari kelompok lain saat digabungkan
+      ORDER_SERVICE_URL: http://order-service:5003/graphql
+    depends_on:
+      - payment-db # Memastikan database berjalan terlebih dahulu sebelum layanan ini
+
+  # Definisi untuk database khusus layanan pembayaran 
+  payment-db:
+    image: mysql:8.0
+    container_name: payment-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: db_pembayaran
+      MYSQL_USER: user_pembayaran
+      MYSQL_PASSWORD: password123
+    ports:
+      # Jika kamu butuh akses database dari luar (misal via DBeaver), gunakan ini.
+      # Port 3307 di mesinmu akan terhubung ke port 3306 di container.
+      - "3307:3306"
+    volumes:
+      - payment-data:/var/lib/mysql # Menyimpan data database agar tidak hilang saat container mati
+
+volumes:
+  payment-data:
