@@ -2,9 +2,12 @@ version: "3.8"
 
 services:
   user-service:
-    build: ./UserService/server
+    build:
+      context: ./UserService/server
+    image: muhammadidzoha/user-service:latest
+    command: sh -c "/wait-for-it.sh mysql:3306 -- npx prisma migrate deploy && npx prisma db seed && npm run dev"
     ports:
-      - "4000:4000"
+      - "5001:5001"
     env_file:
       - ./UserService/server/.env
     depends_on:
@@ -13,16 +16,45 @@ services:
       - backend
     restart: always
 
+  order-service:
+    build:
+      context: ./OrderService/server
+    image: muhammadidzoha/order-service:latest
+    command: sh -c "/wait-for-it.sh mysql:3306 -- npx prisma migrate deploy && npm run dev"
+    ports:
+      - "5003:5003"
+    env_file:
+      - ./OrderService/server/.env
+    depends_on:
+      - mysql
+    networks:
+      - backend
+    restart: always
+
+  client:
+    build:
+      context: ./client
+    image: muhammadidzoha/client:latest
+    ports:
+      - "5173:80"
+    env_file:
+      - ./client/.env
+    depends_on:
+      - user-service
+      - order-service
+    networks:
+      - backend
+    restart: always
+
   mysql:
     image: mysql:8
     environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: tubeseai_userservice
-    MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./mysql-init/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - backend
     restart: always
