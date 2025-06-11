@@ -17,6 +17,20 @@ export const resolvers = {
         throw new Error("Failed to fetch users");
       }
     },
+    userById: async (_, { id }) => {
+      try {
+        const user = await prisma.user.findFirst({
+          where: { id },
+          include: {
+            addresses: true,
+          },
+        });
+        return user;
+      } catch (error) {
+        console.error("Error fetching user by ID:", error);
+        throw new Error("Failed to fetch user by ID");
+      }
+    },
   },
   Mutation: {
     loginUser: async (_, { data }) => {
@@ -26,13 +40,19 @@ export const resolvers = {
           where: {
             username,
           },
+          include: {
+            addresses: true,
+          },
         });
 
         if (!user || user.password !== password) {
           throw new Error("Invalid username or password");
         }
 
-        return { message: "Login successful" };
+        return {
+          user: user,
+          message: "Login successful",
+        };
       } catch (error) {
         console.error("Error logging in user:", error);
         throw new Error("Failed to login user");

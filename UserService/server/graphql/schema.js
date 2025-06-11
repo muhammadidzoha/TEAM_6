@@ -40,9 +40,11 @@ export const typeDefs = `#graphql
 
   type Query {
     users: [Account!]!
+    userById(id: ID!): Account!
   }
 
   type LoginResponse {
+    user: Account!
     message: String!
   }
 
