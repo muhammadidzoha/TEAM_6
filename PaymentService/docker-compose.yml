@@ -9,10 +9,10 @@ services:
       - "5004:5004" # Memetakan port 5004 di mesinmu ke port 5004 di container
     environment:
       # Mengatur environment variables yang akan dibaca oleh src/index.js
-      DB_HOST: payment-db
-      DB_USER: user_pembayaran
-      DB_PASSWORD: password123
-      DB_NAME: db_pembayaran
+      DB_HOST: localhost
+      DB_USER: root
+      DB_PASSWORD: 
+      DB_NAME: eai_project
       # Ganti dengan nama service order dari kelompok lain saat digabungkan
       ORDER_SERVICE_URL: http://order-service:5003/graphql
     depends_on:
@@ -23,10 +23,9 @@ services:
     image: mysql:8.0
     container_name: payment-db
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: db_pembayaran
-      MYSQL_USER: user_pembayaran
-      MYSQL_PASSWORD: password123
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE: eai_project
+
     ports:
       # Jika kamu butuh akses database dari luar (misal via DBeaver), gunakan ini.
       # Port 3307 di mesinmu akan terhubung ke port 3306 di container.
