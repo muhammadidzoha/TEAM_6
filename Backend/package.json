@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "scripts": {
+    "start": "concurrently \"python UserService/app.py\" \"python ProductService/app.py\" \"node OrderService/index.js\" \"node PaymentService/index.js\" \"python HistoryService/app.py\""
+  }
+}
