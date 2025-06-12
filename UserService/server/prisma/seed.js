@@ -1,26 +1,13 @@
 import { PrismaClient } from "@prisma/client";
+import { seedRoles } from "./seeders/RoleSeeder.js";
+import { seedUsers } from "./seeders/UserSeeder.js";
 const prisma = new PrismaClient();
 
 async function main() {
-  try {
-    const existingRoles = await prisma.role.findMany({
-      where: {
-        OR: [{ name: "SELLER" }, { name: "USER" }],
-      },
-    });
+  console.log("Starting seeding process...");
 
-    if (existingRoles.length > 0) {
-      console.log("Roles already exist");
-      return;
-    }
-
-    await prisma.role.createMany({
-      data: [{ name: "SELLER" }, { name: "USER" }],
-    });
-    console.log("Roles created successfully");
-  } catch (error) {
-    console.error(error);
-  }
+  await seedRoles();
+  await seedUsers();
 }
 
 main().finally(() => prisma.$disconnect());

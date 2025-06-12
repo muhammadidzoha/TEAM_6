@@ -16,6 +16,21 @@ services:
       - backend
     restart: always
 
+  product-service:
+    build:
+      context: ./ProductService/server
+    image: muhammadidzoha/product-service:latest
+    command: sh -c "/wait-for-it.sh mysql:3306 -- npx prisma migrate deploy && npx prisma db seed && npm run dev"
+    ports:
+      - "5002:5002"
+    env_file:
+      - ./ProductService/server/.env
+    depends_on:
+      - mysql
+    networks:
+      - backend
+    restart: always
+
   order-service:
     build:
       context: ./OrderService/server

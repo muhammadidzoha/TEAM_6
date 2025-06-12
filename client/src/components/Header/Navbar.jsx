@@ -1,6 +1,6 @@
 import React from "react";
 import { HSStaticMethods } from "preline/preline";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const navList = [
   { id: 1, name: "Home", href: "/" },
@@ -8,6 +8,8 @@ const navList = [
 ];
 
 const Navbar = () => {
+  const location = useLocation();
+
   React.useEffect(() => {
     HSStaticMethods.autoInit();
   }, []);
@@ -24,12 +26,16 @@ const Navbar = () => {
             <NavLink
               className={({ isActive }) =>
                 `relative inline-block text-black focus:outline-hidden ${
-                  isActive &&
-                  "before:absolute before:bottom-0.5 before:start-0 before:-z-1 before:w-full before:h-1 before:bg-yellow-400"
+                  // Aktif jika path diawali dengan "/" (untuk Home) atau path sama persis (untuk lain)
+                  (item.href === "/" && location.pathname.startsWith("/")) ||
+                  (item.href !== "/" && isActive)
+                    ? "before:absolute before:bottom-0.5 before:start-0 before:-z-1 before:w-full before:h-1 before:bg-yellow-400"
+                    : ""
                 }`
               }
               aria-current="page"
               to={item.href}
+              end={item.href !== "/"} // hanya non-end untuk Home
             >
               {item.name}
             </NavLink>
