@@ -23,7 +23,7 @@ const ProductSection = () => {
       toast.success("Berhasil menambahkan produk ke cart!");
     }
     localStorage.setItem("cart", JSON.stringify(cart));
-    window.dispatchEvent(new Event("cart-updated")); // <-- Tambahkan di sini
+    window.dispatchEvent(new Event("cart-updated"));
   };
 
   const query = `

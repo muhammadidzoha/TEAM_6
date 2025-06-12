@@ -41,7 +41,6 @@ const ButtonGroup = () => {
     window.location.reload();
   };
 
-  // --- HANDLE CHECKOUT ---
   const handleCheckout = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -76,7 +75,6 @@ const ButtonGroup = () => {
 
     toast.promise(
       (async () => {
-        // 1. Create Order
         const orderRes = await axios.post(
           import.meta.env.VITE_ORDER_SERVICE_URL,
           {
@@ -106,10 +104,8 @@ const ButtonGroup = () => {
           });
         }
 
-        // 3. Simpan orderId ke localStorage
         localStorage.setItem("currentOrderId", orderId);
 
-        // 4. Delay biar toast success terlihat
         await delay(1000);
 
         return "Order berhasil dibuat!";
@@ -309,6 +305,11 @@ const ButtonGroup = () => {
             aria-orientation="vertical"
             aria-labelledby="hs-dropdown-custom-trigger"
           >
+            <div className="p-1 space-y-0.5">
+              <button className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 w-full">
+                History Transaction
+              </button>
+            </div>
             <div className="p-1 space-y-0.5">
               <button
                 className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100 w-full"
